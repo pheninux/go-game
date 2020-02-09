@@ -12,7 +12,6 @@ func (app *application) routes() http.Handler {
 	standardMiddleware := alice.New(app.recoverPanic, app.logRequest, secureHeaders)
 
 	mux := pat.New()
-
 	mux.Post("/save/login", http.HandlerFunc(app.saveLogin))
 
 	return standardMiddleware.Then(mux)

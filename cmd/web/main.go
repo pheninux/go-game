@@ -60,7 +60,7 @@ func main() {
 	flag.StringVar(&cfg.addr, "addr", ":4000", "HTTP network address")
 	flag.StringVar(&cfg.staticDir, "static-dir", "./ui/static/", "HTTP network address")
 	// Define a new command-line flag for the MySQL DSN string.
-	dsn := flag.String("dsn", "root:r00t@tcp(localhost:3306)/go_game?parseTime=true", "MySQL data source name")
+	dsn := flag.String("dsn", "root:Sherine2011$@tcp(localhost:3306)/go_game?parseTime=true", "MySQL data source name")
 	// Importantly, we use the flag.Parse() function to parse the command-line flag.
 	// This reads in the command-line flag value and assigns it to the addr
 	// variable. You need to call this *before* you use the addr variable
