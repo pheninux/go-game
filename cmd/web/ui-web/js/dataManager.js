@@ -10,7 +10,7 @@ $.getScript(".../model/Player.js", function () {
 
 function savePlayer() {
     //var player = new Player();
-    var player = {"login": $("#login").val() , "lvl" : config.level , "score" : 0 , "pwd" : $("#passWord").val()};
+    var player = {"login": $("#login").val() , "lvl" : sessionStorage.getItem("level") , "score" : 0 , "pwd" : $("#passWord").val()};
     // player.login = $("#login").val();
     // player.lvl = config.level;
     // player.score = 0;
@@ -80,5 +80,9 @@ function refreshResultHighLevel() {
     setInterval(function () {
         getPlayersHighLevel();
     }, 4000);
+
+}
+
+function getLevelBy() {
 
 }
