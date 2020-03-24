@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="../css/espace_game.css">
+    <script type="text/javascript" src="./../lib/jquery/jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./../lib/bootstrap/bootstrap-3.4.1.min.css">
+    <link rel="stylesheet" type="text/css" href="./../lib/datatable/datatables.min.css"/>
+    <script type="text/javascript" src="./../lib/datatable/datatables.min.js"></script>
+    <script type="text/javascript" src="./../lib/awesome-functions/awesome-functions.min.js"></script>
+    <!--script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="./../lib/bootstrap/bootstrap-3.4.1.min.js"></script>
+    <script type="text/javascript" src="./../config/conf.js"></script>
+    <script type="text/javascript" src="./../model/Game.js"></script>
+    <script type="text/javascript" src="./../model/Player.js"></script>
+    <script type="text/javascript" src="./../model/Position.js"></script>
+    <script type="text/javascript" src="./../model/Rectangle.js"></script>
+    <script type="text/javascript" src="./../model/Canvas.js"></script>
+    <script type="text/javascript" src="./../js/dataManager.js"></script>
+    <script type="text/javascript" src="./../js/gameManager.js"></script>
+
+    <title>Title</title>
+</head>
+<body>
+
+<div id="bodySpaceGame" class="container">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Login</label>  <span id="login"></span><br>
+                    <label>Level</label> <span id="level"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+               <table id="tbPlayers" class="table table-borderless table-hover">
+               </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="container text-center">
+        <div id="countDown"></div>
+        <div id="msgToStart"></div>
+        <canvas id="canv" width="400" height="400"></canvas>
+        <div class="row">
+            <button id="playBtn" type="button" class="btn btn-lg btn-primary" onclick="playCountDown()">Jouer</button>
+            <button type="button" class="btn btn-lg btn-primary" onclick="exitGame()">Quitter</button>
+        </div>
+
+    </div>
+
+</div>
+</body>
+</html>

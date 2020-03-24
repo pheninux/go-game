@@ -1,0 +1,48 @@
+body{
+    background: #a8b9be;
+    padding: 10px;
+}
+#bodySpaceGame{
+    background: whitesmoke;
+    padding:5px;
+    border-style: outset ;
+}
+h2 , h1{
+    font-family: Aharoni;
+    text-align: center;
+    color: #795548;
+    font-size: 2vw;
+}
+canvas{
+    border : 1px solid green ;
+    display : block !important; ;
+    margin : 30px auto ;
+
+}
+
+.webWindows{
+    width: 400px;
+    height: 400px;
+}
+
+.deviceWindows{
+    width: 300px;
+    height: 300px;
+}
+
+#countDown{
+    text-align: center;
+    font-size: 3vw;
+}
+
+#msgToStart{
+    text-align: center;
+    font-size: 3vw;
+}
+span{
+    color: #56baed;
+}
+
+table th {
+    background: #00bcd4;
+}

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/x/lib/bootstrap/bootstrap.min.css">
+    <script src="/x/lib/jquery/jquery-3.4.1.min.js"></script>
+    <script src="/x/lib/bootstrap/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/x/config/conf.js"></script>
+    <script type="text/javascript" src="/x/model/Player.js"></script>
+    <script src="/x/js/dataManager.js"></script>
+
+</head>
+<body>
+
+<div class="container">
+    <h3 class="text-center text-white pt-5">Login form</h3>
+    <div id="login-row" class="row justify-content-center align-items-center">
+        <div id="login-column" class="col-md-6">
+
+                <form id="login-form" class="form" action="" method="post">
+                    <div class="form-group">
+                        <label for="login">Player login</label>
+                        <input type="text" name="username" id="login" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="passWord">PassWord</label>
+                        <input type="password" name="pass" id="passWord" class="form-control">
+                    </div>
+                    <p id="alert" style="color: red"></p>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary form-control" onclick="savePlayer()">Go</button>
+                    </div>
+                </form>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

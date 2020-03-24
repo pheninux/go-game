@@ -5,7 +5,7 @@ import (
 	"flag"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"github.com/pheninux/go-game/pkg/models/mysql"
+	"goGame/pkg/models/mysql"
 	"html/template"
 	"log"
 	"net/http"
@@ -13,7 +13,7 @@ import (
 )
 
 // Define an application struct to hold the application-wide dependencies for the
-// web application. For now we'll only include fields for the two custom loggers, but
+// goGame application. For now we'll only include fields for the two custom loggers, but
 // we'll add more to it as the build progresses.
 
 type application struct {
@@ -21,6 +21,8 @@ type application struct {
 	infoLog       *log.Logger
 	dbModel       *mysql.DataModel
 	templateCache map[string]*template.Template
+	fi            *os.File
+	fe            *os.File
 }
 
 type config struct {
@@ -30,11 +32,14 @@ type config struct {
 
 func main() {
 
-	fi, err := os.OpenFile("./cmd/web/temp/info.log", os.O_APPEND|os.O_RDWR|os.O_CREATE, 0666)
-	fe, err := os.OpenFile("./cmd/web/temp/error.log", os.O_APPEND|os.O_RDWR|os.O_CREATE, 0666)
+	fi, err := os.OpenFile("/var/www/go/deploy/game/logs/info.log", os.O_APPEND|os.O_RDWR|os.O_CREATE, 0666)
+	//fi, err := os.OpenFile("/home/haddad/go/deploy-app/my-game/logs/info.log", os.O_APPEND|os.O_RDWR|os.O_CREATE, 0666)
+	fe, err := os.OpenFile("/var/www/go/deploy/game/logs/error.log", os.O_APPEND|os.O_RDWR|os.O_CREATE, 0666)
+	//fe, err := os.OpenFile("/home/haddad/go/deploy-app/my-game/logs/error.log", os.O_APPEND|os.O_RDWR|os.O_CREATE, 0666)
 
 	if err != nil {
 		log.Fatal(err)
+		fe.WriteString(err.Error())
 	}
 	defer fi.Close()
 	defer fe.Close()
@@ -60,7 +65,8 @@ func main() {
 	flag.StringVar(&cfg.addr, "addr", ":4000", "HTTP network address")
 	flag.StringVar(&cfg.staticDir, "static-dir", "./ui/static/", "HTTP network address")
 	// Define a new command-line flag for the MySQL DSN string.
-	dsn := flag.String("dsn", "root:Sherine2011$@tcp(localhost:3306)/go_game?parseTime=true", "MySQL data source name")
+	dsn := flag.String("dsn", "adil:sherine@tcp(54.38.189.215:3306)/go_game?parseTime=true", "MySQL data source name")
+	//dsn := flag.String("dsn", "adil:sherine2011@tcp(localhost:3306)/go_game?parseTime=true", "MySQL data source name")
 	// Importantly, we use the flag.Parse() function to parse the command-line flag.
 	// This reads in the command-line flag value and assigns it to the addr
 	// variable. You need to call this *before* you use the addr variable
@@ -74,6 +80,7 @@ func main() {
 	db, err := openGormDB(*dsn)
 	if err != nil {
 		errorLog.Fatal(err)
+		fe.WriteString(err.Error())
 	}
 
 	//We also defer a call to db.Close(), so that the connection pool is closed
@@ -82,12 +89,15 @@ func main() {
 
 	if err != nil {
 		errorLog.Fatal(err)
+		fe.WriteString(err.Error())
 	}
 	// Initialize a new instance of application containing the dependencies.
 	app := &application{
 		infoLog:  infoLog,
 		errorLog: errorLog,
 		dbModel:  &mysql.DataModel{db},
+		fi:       fi,
+		fe:       fe,
 	}
 
 	srv := &http.Server{
@@ -97,7 +107,9 @@ func main() {
 	}
 
 	app.infoLog.Printf("Starting server on %v ", cfg.addr)
+	fi.WriteString("Starting server on :4000 \n")
 	err = srv.ListenAndServe()
+	fe.WriteString(err.Error())
 	app.errorLog.Fatal(err)
 
 }

@@ -8,4 +8,10 @@ type Player struct {
 	Login string `gorm:"type:varchar(25)" json:"login"`
 	Lvl   int    `gorm:"type:int(11)" json:"lvl"`
 	Score int    `gorm:"type:int(11)" json:"score"`
+	Pwd   string `gorm:"type:varchar(100)" json:"pwd"`
+}
+
+type LightPlayer struct {
+	Login string `json:"login"`
+	Lvl   int    `json:"lvl"`
 }
