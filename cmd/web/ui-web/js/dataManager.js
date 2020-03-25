@@ -17,19 +17,20 @@ function savePlayer() {
     // player.pwd = $("#passWord").val();
 
     $.ajax({
-        url: config.server.urlServer + "/save/player",
-        headers: {'Access-Control-Allow-Origin': config.server.urlServer},
+        url: config.env == "PROD" ? config.server.urlServer : config.server.urlLocalHost + "/save/player",
         data: JSON.stringify(player),
         type: 'POST',
 
         success: function (response) {
-            console.log(response);
+
             dataToJson = JSON.parse(response);
+
             if (dataToJson.err_msg == "") {
                 sessionStorage.setItem("id", dataToJson.player.ID);
                 sessionStorage.setItem("login", dataToJson.player.login);
-                sessionStorage.setItem("level", dataToJson.player.lvl);
-                window.location.href = config.server.urlServer + "/x/html/espace_game.html";
+                sessionStorage.setItem("level", dataToJson.player.lvl == 0 ? config.level :  1 );
+                //TODO fix level when player connex
+                window.location.href = config.env == "PROD" ? config.server.urlServer : config.server.urlLocalHost + "/x/html/espace_game.html";
             } else {
                 $("#alert").html(dataToJson.err_msg);
             }
@@ -45,8 +46,7 @@ function updateplayer() {
     // player.score = 0;
     var player = {"id" :parseInt(sessionStorage.getItem("id")), "login": sessionStorage.getItem("login") , "lvl" : config.level , "score" : 0 };
     $.ajax({
-        url: config.server.urlServer + "/update/player",
-        headers: {'Access-Control-Allow-Origin': config.server.urlServer},
+        url: config.env == "PROD" ? config.server.urlServer : config.server.urlLocalHost + "/update/player",
         data: JSON.stringify(player),
         type: 'POST',
 
@@ -58,8 +58,7 @@ function updateplayer() {
 
 function getPlayersHighLevel() {
     $.ajax({
-        url: config.server.urlServer + "/players",
-        headers: {'Access-Control-Allow-Origin': config.server.urlServer},
+        url: config.env == "PROD" ? config.server.urlServer : config.server.urlLocalHost + "/players",
         type: 'GET',
 
         success: function (jsondata) {

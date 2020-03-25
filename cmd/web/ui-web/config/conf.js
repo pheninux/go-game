@@ -1,8 +1,9 @@
 var config = {
+    env : "DEV",
     server: {
         urlServer: "http://54.38.189.215:4000",
-        //urlServer :"http://localhost:4000",
-        urlLocalHost: "http://localhost:63342/my-game/ui-web",
+        urlLocalHost: "http://localhost:4000",
+        //urlLocalHost: "http://localhost:63342/my-game/ui-web",
     },
     level: 1,
     countDown: 3,

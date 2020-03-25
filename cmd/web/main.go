@@ -28,21 +28,32 @@ type application struct {
 type config struct {
 	addr      string
 	staticDir string
+	env       string
 }
 
 func main() {
 
-	fi, err := os.OpenFile("/var/www/go/deploy/game/logs/info.log", os.O_APPEND|os.O_RDWR|os.O_CREATE, 0666)
-	//fi, err := os.OpenFile("/home/haddad/go/deploy-app/my-game/logs/info.log", os.O_APPEND|os.O_RDWR|os.O_CREATE, 0666)
-	fe, err := os.OpenFile("/var/www/go/deploy/game/logs/error.log", os.O_APPEND|os.O_RDWR|os.O_CREATE, 0666)
-	//fe, err := os.OpenFile("/home/haddad/go/deploy-app/my-game/logs/error.log", os.O_APPEND|os.O_RDWR|os.O_CREATE, 0666)
+
+	//set env variables
+	os.Setenv("LOG_DIR_PROD","/var/www/go/deploy/game/logs")
+	os.Setenv("LOG_DIR_DEV","/Users/nouvelutilisateur1/Documents/go/src/Mes Projets Go/go-game/cmd/web/temp")
+
+	cfg := new(config)
+	// get environement value
+	flag.StringVar(&cfg.env,"env","D" ,"Envorinement statut")
+
+	 var fi * os.File
+	 var fe *os.File
+	 var err error
+
+	manageLogFiles(cfg.env , fi , fe , &err)
 
 	if err != nil {
 		log.Fatal(err)
 		fe.WriteString(err.Error())
 	}
-	defer fi.Close()
-	defer fe.Close()
+
+
 	// Use log.New() to create a logger for writing information messages. This takes
 	// three parameters: the destination to write the logs to (os.Stdout), a string
 	// prefix for message (INFO followed by a tab), and flags to indicate what
@@ -57,7 +68,7 @@ func main() {
 	errorLog := log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Llongfile)
 	//errorLog = log.New(fe, "ERROR\t", log.Ldate|log.Ltime|log.Llongfile)
 
-	cfg := new(config)
+
 	// Define a new command-line flag with the name 'addr', a default value of ":4000"
 	// and some short help text explaining what the flag controls. The value of the
 	// flag will be stored in the addr variable at runtime.
@@ -66,6 +77,7 @@ func main() {
 	flag.StringVar(&cfg.staticDir, "static-dir", "./ui/static/", "HTTP network address")
 	// Define a new command-line flag for the MySQL DSN string.
 	dsn := flag.String("dsn", "adil:sherine@tcp(54.38.189.215:3306)/go_game?parseTime=true", "MySQL data source name")
+	//TODO change data base user & mdp
 	//dsn := flag.String("dsn", "adil:sherine2011@tcp(localhost:3306)/go_game?parseTime=true", "MySQL data source name")
 	// Importantly, we use the flag.Parse() function to parse the command-line flag.
 	// This reads in the command-line flag value and assigns it to the addr
@@ -112,6 +124,34 @@ func main() {
 	fe.WriteString(err.Error())
 	app.errorLog.Fatal(err)
 
+}
+
+func manageLogFiles(env string , finf *os.File , ferr *os.File , e *error) {
+
+	if env == "P" {
+		dir := os.Getenv("DIR_LOG_PROD")
+		fi, err := os.OpenFile(dir +"/info.log", os.O_APPEND|os.O_RDWR|os.O_CREATE, 0666)
+		finf = fi
+		e = &err
+		fe, err := os.OpenFile(dir+"/error.log", os.O_APPEND|os.O_RDWR|os.O_CREATE, 0666)
+		ferr = fe
+		e = &err
+		closeLogFiles(fi, fe)
+	} else {
+		dir := os.Getenv("DIR_LOG_DEV")
+		fi, err := os.OpenFile(dir+"/info.log", os.O_APPEND|os.O_RDWR|os.O_CREATE, 0666)
+		finf = fi
+		e = &err
+		fe, err := os.OpenFile(dir+"/error.log", os.O_APPEND|os.O_RDWR|os.O_CREATE, 0666)
+		ferr = fe
+		e = &err
+		closeLogFiles(fi, fe)
+	}
+}
+
+func closeLogFiles(fi *os.File , fe *os.File)  {
+	defer fi.Close()
+	defer fe.Close()
 }
 
 // for a given DSN.
