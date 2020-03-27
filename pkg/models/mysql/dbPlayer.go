@@ -2,10 +2,10 @@ package mysql
 
 import "goGame/pkg/models"
 
-func (db *DataModel) SavePlayer(p models.Player) (models.Player, error) {
-
-	err := db.Db.Debug().Create(&p).Error
-	return p, err
+func (db *DataModel) SavePlayer(p models.Player) (models.PlayerDto2, error) {
+	var dto models.PlayerDto2
+	err := db.Db.Debug().Create(&p).Scan(&dto).Error
+	return dto, err
 }
 
 func (db *DataModel) UpdatePlayer(p models.Player) error {
@@ -13,8 +13,8 @@ func (db *DataModel) UpdatePlayer(p models.Player) error {
 
 }
 
-func (db *DataModel) Players() ([]models.LightPlayer, error) {
-	var p []models.LightPlayer
+func (db *DataModel) Players() ([]models.PlayerDto1, error) {
+	var p []models.PlayerDto1
 	err := db.Db.Debug().Table("players").Select("login , lvl").Order("lvl desc").Limit(3).Scan(&p).Error
 	return p, err
 }

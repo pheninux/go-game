@@ -22,11 +22,14 @@ func (app *application) savePlayer(w http.ResponseWriter, r *http.Request) {
 		if err := json.Unmarshal(b, &p); err == nil {
 			fp, err := app.dbModel.GetPlayerByLogin(p)
 			if err == nil && fp.Login != "" {
+				var pmap models.PlayerDto2
 				if app.comparePasswords(fp.Pwd, []byte(p.Pwd)) {
-					rsb := models.ResponseBodySavePlayer{fp, ""}
+					pmap = models.PlayerDto2{Id: fp.ID, Login: fp.Login, Lvl: fp.Lvl}
+					rsb := models.ResponseBodySavePlayer{pmap, ""}
 					json.NewEncoder(w).Encode(rsb)
 				} else {
-					rsb := models.ResponseBodySavePlayer{fp, "PassWord incorrect"}
+					pmap = models.PlayerDto2{Id: p.ID, Login: p.Login, Lvl: p.Lvl}
+					rsb := models.ResponseBodySavePlayer{pmap, "PassWord incorrect"}
 					json.NewEncoder(w).Encode(rsb)
 				}
 			} else {

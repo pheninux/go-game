@@ -10,14 +10,15 @@ $.getScript(".../model/Player.js", function () {
 
 function savePlayer() {
     //var player = new Player();
-    var player = {"login": $("#login").val() , "lvl" : sessionStorage.getItem("level") , "score" : 0 , "pwd" : $("#passWord").val()};
+
+    var player = {"login": $("#login__username").val(), "lvl": config.level, "score": 0, "pwd": $("#login__password").val()};
     // player.login = $("#login").val();
     // player.lvl = config.level;
     // player.score = 0;
     // player.pwd = $("#passWord").val();
 
     $.ajax({
-        url: config.env == "PROD" ? config.server.urlServer : config.server.urlLocalHost + "/save/player",
+        url: config.env == "PROD" ? config.server.urlServer + "/save/player" : config.server.urlLocalHost + "/save/player",
         data: JSON.stringify(player),
         type: 'POST',
 
@@ -28,9 +29,9 @@ function savePlayer() {
             if (dataToJson.err_msg == "") {
                 sessionStorage.setItem("id", dataToJson.player.ID);
                 sessionStorage.setItem("login", dataToJson.player.login);
-                sessionStorage.setItem("level", dataToJson.player.lvl == 0 ? config.level :  1 );
+                sessionStorage.setItem("level", dataToJson.player.lvl );
                 //TODO fix level when player connex
-                window.location.href = config.env == "PROD" ? config.server.urlServer : config.server.urlLocalHost + "/x/html/espace_game.html";
+                window.location.href = config.env == "PROD" ? config.server.urlServer + "/x/html/espace_game.html" : config.server.urlLocalHost + "/x/html/espace_game.html";
             } else {
                 $("#alert").html(dataToJson.err_msg);
             }
@@ -44,9 +45,14 @@ function updateplayer() {
     // player.login = sessionStorage.getItem("login");
     // player.lvl = config.level;
     // player.score = 0;
-    var player = {"id" :parseInt(sessionStorage.getItem("id")), "login": sessionStorage.getItem("login") , "lvl" : config.level , "score" : 0 };
+    var player = {
+        "id": parseInt(sessionStorage.getItem("id")),
+        "login": sessionStorage.getItem("login"),
+        "lvl": config.level,
+        "score": 0
+    };
     $.ajax({
-        url: config.env == "PROD" ? config.server.urlServer : config.server.urlLocalHost + "/update/player",
+        url: config.env == "PROD" ? config.server.urlServer  + "/update/player" : config.server.urlLocalHost + "/update/player",
         data: JSON.stringify(player),
         type: 'POST',
 
@@ -58,7 +64,7 @@ function updateplayer() {
 
 function getPlayersHighLevel() {
     $.ajax({
-        url: config.env == "PROD" ? config.server.urlServer : config.server.urlLocalHost + "/players",
+        url: config.env == "PROD" ? config.server.urlServer  + "/players" : config.server.urlLocalHost + "/players",
         type: 'GET',
 
         success: function (jsondata) {

@@ -7,6 +7,15 @@ var nbrErrorCase = 0;
 var isDevice = false ;
 
 
+function manageSession() {
+   if (sessionStorage.getItem("id") == "" || sessionStorage.getItem("id") ==  null ) {
+         window.location.href = config.env == "PROD" ? config.server.urlServer + "/x/espace_login.html" : config.server.urlLocalHost + "/x/espace_login.html" ;
+   }else{
+       $("#login").html(sessionStorage.getItem("login"));
+       $("#level").html(sessionStorage.getItem("level"));
+   }
+}
+
 /***
  * start programme
  */
@@ -14,10 +23,8 @@ $(document).ready(function () {
 
     /*** manage even window size ***/
     manageWindowSize();
-    /*** get login and level ***/
-    $("#login").html(sessionStorage.getItem("login"));
-    $("#level").html(sessionStorage.getItem("level"));
-
+    /*** manage session storage ***/
+    manageSession();
     /*** load players high level ***/
     getPlayersHighLevel();
     refreshResultHighLevel();
@@ -415,5 +422,5 @@ function playSong(result) {
  */
 function exitGame() {
     sessionStorage.clear();
-    window.location.href = config.server.urlServer + "/x/espace_login.html"
+    window.location.href = config.env == "PROD" ? config.server.urlServer + "/x/espace_login.html" : config.server.urlLocalHost  + "/x/espace_login.html"
 }

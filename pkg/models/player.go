@@ -11,7 +11,13 @@ type Player struct {
 	Pwd   string `gorm:"type:varchar(100)" json:"pwd"`
 }
 
-type LightPlayer struct {
+type PlayerDto1 struct {
+	Login string `json:"login"`
+	Lvl   int    `json:"lvl"`
+}
+
+type PlayerDto2 struct {
+	Id    uint   `json:"id"`
 	Login string `json:"login"`
 	Lvl   int    `json:"lvl"`
 }
