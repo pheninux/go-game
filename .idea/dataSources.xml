@@ -2,10 +2,16 @@
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
     <data-source source="LOCAL" name="go_game@localhost" uuid="529daac4-20bf-4153-8bea-4e6ffd9fa1f1">
-      <driver-ref>mysql.8</driver-ref>
+      <driver-ref>mysql</driver-ref>
       <synchronize>true</synchronize>
-      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
       <jdbc-url>jdbc:mysql://localhost:3306/go_game</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="MySQL for 5.1 - go_game@54.38.189.215" uuid="3fb56c33-6697-4d7f-9929-8b90fbcaa23e">
+      <driver-ref>mysql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://54.38.189.215:3306/go_game</jdbc-url>
     </data-source>
   </component>
 </project>

@@ -27,7 +27,7 @@ function savePlayer() {
             dataToJson = JSON.parse(response);
 
             if (dataToJson.err_msg == "") {
-                sessionStorage.setItem("id", dataToJson.player.ID);
+                sessionStorage.setItem("id", dataToJson.player.id);
                 sessionStorage.setItem("login", dataToJson.player.login);
                 sessionStorage.setItem("level", dataToJson.player.lvl );
                 //TODO fix level when player connex
@@ -48,7 +48,7 @@ function updateplayer() {
     var player = {
         "id": parseInt(sessionStorage.getItem("id")),
         "login": sessionStorage.getItem("login"),
-        "lvl": config.level,
+        "lvl": parseInt(sessionStorage.getItem("level")),
         "score": 0
     };
     $.ajax({

@@ -1,9 +1,11 @@
+
+
 body{
-    background: #a8b9be;
+    background: var(--bodyBackgroundColor);
     padding: 10px;
 }
 #bodySpaceGame{
-    background: whitesmoke;
+    background: var(--bodySpaceGameBackgroundColor);
     padding:5px;
     border-style: outset ;
 }

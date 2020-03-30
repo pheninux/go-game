@@ -7,7 +7,7 @@ var nbrErrorCase = 0;
 var isDevice = false ;
 
 
-function manageSession() {
+function checkSession() {
    if (sessionStorage.getItem("id") == "" || sessionStorage.getItem("id") ==  null ) {
          window.location.href = config.env == "PROD" ? config.server.urlServer + "/x/espace_login.html" : config.server.urlLocalHost + "/x/espace_login.html" ;
    }else{
@@ -24,10 +24,10 @@ $(document).ready(function () {
     /*** manage even window size ***/
     manageWindowSize();
     /*** manage session storage ***/
-    manageSession();
+    checkSession();
     /*** load players high level ***/
-    getPlayersHighLevel();
-    refreshResultHighLevel();
+    //getPlayersHighLevel();
+    //refreshResultHighLevel();
     /*** creation des positions par defaut ***/
     createFloorDefaultPositions();
     /*** creation des rondom pour full positions  ***/
@@ -144,15 +144,15 @@ function getCoordinatePointer() {
  * @param tabPos
  * @param ctx
  */
-function disignRectWithTimeOut(idx, tabRectangles, ctx, fStyle, sStyle, tAlign, tBalign, lWidht, callback) {
+function disignRectWithTimeOut(idx, tabRectangles, ctx, fStyle, sStyle, tAlign, tBalign, lWidht, flag) {
 
     return new Promise(resolve => {
         setTimeout(function () {
 
             if (idx >= 0 && idx <= tabRectangles.length - 1) {
-                disignRect(ctx, tabRectangles, idx, fStyle, sStyle, tAlign, tBalign, lWidht);
+                disignRect(ctx, tabRectangles, idx, fStyle, sStyle, tAlign, tBalign, lWidht , flag);
                 idx++;
-                disignRectWithTimeOut(idx, tabRectangles, ctx, fStyle, sStyle, tAlign, tBalign, lWidht);
+                disignRectWithTimeOut(idx, tabRectangles, ctx, fStyle, sStyle, tAlign, tBalign, lWidht , flag);
             } else {
                 resolve("success");
             }
@@ -175,7 +175,7 @@ function disignRectWithTimeOut(idx, tabRectangles, ctx, fStyle, sStyle, tAlign, 
  * @param tBalign
  * @param lWidht
  */
-function disignRect(ctx, tabRects, i, fStyle, sStyle, tAlign, tBalign, lWidht) {
+function disignRect(ctx, tabRects, i, fStyle, sStyle, tAlign, tBalign, lWidht , flag) {
 
     ctx.fillStyle = fStyle;
     ctx.strokeStyle = sStyle;
@@ -184,6 +184,12 @@ function disignRect(ctx, tabRects, i, fStyle, sStyle, tAlign, tBalign, lWidht) {
     ctx.lineWidth = lWidht;
     ctx.fillRect(tabRects[i].position.x, tabRects[i].position.y, tabRects[i].width, tabRects[i].height);
     ctx.strokeRect(tabRects[i].position.x, tabRects[i].position.y, tabRects[i].width, tabRects[i].height);
+    if (i == tabRects.length -1 && flag == 1){
+        /*** enable the click in the floor game ***/
+        enableClickInFloor = true;
+        document.getElementById("countDown").innerHTML = "Go";
+        $("#countDown").css("color","green");
+    }
 }
 
 /***
@@ -280,6 +286,8 @@ function getRandomColor() {
  */
 function playCountDown() {
 
+    checkSession();
+    var flag = 1 ;
     /*** desabled play btn ***/
     $("#playBtn").addClass("disabled");
     // initialise enable click in canavas floor and nbr of errors
@@ -302,10 +310,9 @@ function playCountDown() {
             config.countDown = 3;
             clearInterval(downloadTimer);
             document.getElementById("countDown").innerHTML = "Start memoring case";
-            /*** enable the click in the floor game ***/
-            enableClickInFloor = true;
+            $("#countDown").css("color","red");
             disignRectWithTimeOut(0, levelRects, ctx, config.rect.style.inStart.fillStyle, config.rect.style.inStart.strokeStyle,
-                config.rect.style.textAlign, config.rect.style.textBaseline, config.rect.style.lineWidth);
+                config.rect.style.textAlign, config.rect.style.textBaseline, config.rect.style.lineWidth , flag);
 
         }
 
@@ -392,6 +399,12 @@ function checkResultat(tabRects, x, y, ctx, i, fStyle, sStyle, tAlign, tBalign, 
  *   increment level
  */
 function nextLevel() {
+    var level = parseInt(sessionStorage.getItem("level")) ;
+    if ( level != null) {
+        if ( config.level != level) {
+            config.level = level ;
+        }
+    }
     config.level++;
     config.nbrRect++;
     $("#level").html(config.level);
