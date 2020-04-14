@@ -5,7 +5,7 @@ import (
 	"flag"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"goGame/pkg/models/mysql"
+	"goGame/pkg/model/dataBase"
 	"html/template"
 	"log"
 	"net/http"
@@ -19,7 +19,7 @@ import (
 type application struct {
 	errorLog      *log.Logger
 	infoLog       *log.Logger
-	dbModel       *mysql.DataModel
+	dbModel       *dataBase.DataModel
 	templateCache map[string]*template.Template
 	fi            *os.File
 	fe            *os.File
@@ -36,7 +36,8 @@ func main() {
 
 	cfg := new(config)
 
-	flag.StringVar(&cfg.logDir, "logDir", "/var/www/go/deploy/game/logs", "Log directory")
+	//flag.StringVar(&cfg.logDir, "logDir", "/var/www/go/deploy/game/logs", "Log directory")
+	flag.StringVar(&cfg.logDir, "logDir", "/Users/phenix/go/src/go-game/cmd/web/temp/", "Log directory")
 	fi, err := os.OpenFile(cfg.logDir+"/info.log", os.O_APPEND|os.O_RDWR|os.O_CREATE, 0666)
 	fe, err := os.OpenFile(cfg.logDir+"/error.log", os.O_APPEND|os.O_RDWR|os.O_CREATE, 0666)
 
@@ -69,7 +70,7 @@ func main() {
 	flag.StringVar(&cfg.addr, "addr", ":4000", "HTTP network address")
 	flag.StringVar(&cfg.staticDir, "static-dir", "./ui/static/", "HTTP network address")
 	// Define a new command-line flag for the MySQL DSN string.
-	dsn := flag.String("dsn", "root:sherine2011@tcp(localhost:3306)/go_game?parseTime=true", "MySQL data source name")
+	dsn := flag.String("dsn", "root:sherine2011*@tcp(localhost:3306)/go_game?parseTime=true", "MySQL data source name")
 	//TODO change data base user & mdp
 	//dsn := flag.String("dsn", "adil:sherine2011@tcp(localhost:3306)/go_game?parseTime=true", "MySQL data source name")
 	// Importantly, we use the flag.Parse() function to parse the command-line flag.
@@ -100,7 +101,7 @@ func main() {
 	app := &application{
 		infoLog:  infoLog,
 		errorLog: errorLog,
-		dbModel:  &mysql.DataModel{db},
+		dbModel:  &dataBase.DataModel{db},
 		fi:       fi,
 		fe:       fe,
 	}

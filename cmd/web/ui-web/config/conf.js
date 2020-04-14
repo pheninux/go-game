@@ -1,5 +1,5 @@
 var config = {
-    env : "PROD",
+    env : "DEV",
     server: {
         urlServer: "http://54.38.189.215:4000",
         urlLocalHost: "http://localhost:4000",

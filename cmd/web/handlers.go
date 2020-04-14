@@ -2,7 +2,8 @@ package main
 
 import (
 	"encoding/json"
-	"goGame/pkg/models"
+	"goGame/pkg/model"
+	"goGame/pkg/responsesBody"
 	"io/ioutil"
 	"net/http"
 )
@@ -16,20 +17,29 @@ r = reslut of player after save
 func (app *application) savePlayer(w http.ResponseWriter, r *http.Request) {
 
 	// parse r body as byte and then to player object
+
 	b, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		app.serverError(w, err)
+	}
+	p := model.Player{}
+	if err := json.Unmarshal(b, &p); err != nil {
+		app.serverError(w, err)
+	}
+
 	if err == nil {
-		p := models.Player{}
+		p := model.Player{}
 		if err := json.Unmarshal(b, &p); err == nil {
 			fp, err := app.dbModel.GetPlayerByLogin(p)
 			if err == nil && fp.Login != "" {
-				var pmap models.PlayerDto2
+				var pmap model.PlayerDto2
 				if app.comparePasswords(fp.Pwd, []byte(p.Pwd)) {
-					pmap = models.PlayerDto2{Id: fp.ID, Login: fp.Login, Lvl: fp.Lvl}
-					rsb := models.ResponseBodySavePlayer{pmap, ""}
+					pmap = model.PlayerDto2{Id: fp.ID, Login: fp.Login, Lvl: fp.Lvl}
+					rsb := responsesBody.ResponseBodySavePlayer{pmap, ""}
 					json.NewEncoder(w).Encode(rsb)
 				} else {
-					pmap = models.PlayerDto2{Id: p.ID, Login: p.Login, Lvl: p.Lvl}
-					rsb := models.ResponseBodySavePlayer{pmap, "PassWord incorrect"}
+					pmap = model.PlayerDto2{Id: p.ID, Login: p.Login, Lvl: p.Lvl}
+					rsb := responsesBody.ResponseBodySavePlayer{pmap, "PassWord incorrect"}
 					json.NewEncoder(w).Encode(rsb)
 				}
 			} else {
@@ -39,7 +49,7 @@ func (app *application) savePlayer(w http.ResponseWriter, r *http.Request) {
 
 				r, err := app.dbModel.SavePlayer(p)
 				if err == nil {
-					rsb := models.ResponseBodySavePlayer{r, ""}
+					rsb := responsesBody.ResponseBodySavePlayer{r, ""}
 					if err := json.NewEncoder(w).Encode(&rsb); err != nil {
 						app.serverError(w, err)
 					}
@@ -66,7 +76,7 @@ func (app *application) updatePlayer(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		app.serverError(w, err)
 	}
-	p := models.Player{}
+	p := model.Player{}
 	if err := json.Unmarshal(b, &p); err != nil {
 		app.serverError(w, err)
 	} else if err = app.dbModel.UpdatePlayer(p); err != nil {
