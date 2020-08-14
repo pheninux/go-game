@@ -37,7 +37,7 @@ func main() {
 	cfg := new(config)
 
 	//flag.StringVar(&cfg.logDir, "logDir", "/var/www/go/deploy/game/logs", "Log directory")
-	flag.StringVar(&cfg.logDir, "logDir", "/Users/phenix/go/src/go-game/cmd/web/temp/", "Log directory")
+	flag.StringVar(&cfg.logDir, "logDir", "/Users/phenix/home/go/src/game/cmd/web/temp", "Log directory")
 	fi, err := os.OpenFile(cfg.logDir+"/info.log", os.O_APPEND|os.O_RDWR|os.O_CREATE, 0666)
 	fe, err := os.OpenFile(cfg.logDir+"/error.log", os.O_APPEND|os.O_RDWR|os.O_CREATE, 0666)
 
@@ -46,7 +46,7 @@ func main() {
 
 	if err != nil {
 		log.Fatal(err)
-		fe.WriteString(err.Error())
+		fe.WriteString(err.Error() + "\n")
 	}
 
 	// Use log.New() to create a logger for writing information messages. This takes
@@ -67,7 +67,7 @@ func main() {
 	// and some short help text explaining what the flag controls. The value of the
 	// flag will be stored in the addr variable at runtime.
 	//addr := flag.String("addr", ":4000", "HTTP network address")
-	flag.StringVar(&cfg.addr, "addr", ":4000", "HTTP network address")
+	flag.StringVar(&cfg.addr, "addr", ":4001", "HTTP network address")
 	flag.StringVar(&cfg.staticDir, "static-dir", "./ui/static/", "HTTP network address")
 	// Define a new command-line flag for the MySQL DSN string.
 	dsn := flag.String("dsn", "root:sherine2011*@tcp(localhost:3306)/go_game?parseTime=true", "MySQL data source name")
@@ -86,7 +86,7 @@ func main() {
 	db, err := openGormDB(*dsn)
 	if err != nil {
 		errorLog.Fatal(err)
-		fe.WriteString(err.Error())
+		fe.WriteString(err.Error() + "\n")
 	}
 
 	//We also defer a call to db.Close(), so that the connection pool is closed
@@ -95,7 +95,7 @@ func main() {
 
 	if err != nil {
 		errorLog.Fatal(err)
-		fe.WriteString(err.Error())
+		fe.WriteString(err.Error() + "\n")
 	}
 	// Initialize a new instance of application containing the dependencies.
 	app := &application{
@@ -113,9 +113,9 @@ func main() {
 	}
 
 	app.infoLog.Printf("Starting server on %v ", cfg.addr)
-	fi.WriteString("Starting server on :4000 \n")
+	fi.WriteString("Starting server on :4001 \n")
 	err = srv.ListenAndServe()
-	fe.WriteString(err.Error())
+	fe.WriteString(err.Error() + "\n")
 	app.errorLog.Fatal(err)
 
 }

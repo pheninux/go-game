@@ -17,8 +17,8 @@ func (app *application) routes() http.Handler {
 	mux.Post("/save/player", http.HandlerFunc(app.savePlayer))
 	mux.Post("/update/player", http.HandlerFunc(app.updatePlayer))
 	mux.Get("/players", http.HandlerFunc(app.players))
-	fileServer := http.FileServer(rice.MustFindBox("./ui-web").HTTPBox())
-	mux.Get("/x/", http.StripPrefix("/x", fileServer))
+	fileServer := http.FileServer(rice.MustFindBox("../../ui").HTTPBox())
+	mux.Get("/game/", http.StripPrefix("/game", fileServer))
 	handler := cors.AllowAll().Handler(mux)
 	return standardMiddleware.Then(handler)
 }

@@ -39,7 +39,7 @@ func (app *application) savePlayer(w http.ResponseWriter, r *http.Request) {
 					json.NewEncoder(w).Encode(rsb)
 				} else {
 					pmap = model.PlayerDto2{Id: p.ID, Login: p.Login, Lvl: p.Lvl}
-					rsb := responsesBody.ResponseBodySavePlayer{pmap, "PassWord incorrect"}
+					rsb := responsesBody.ResponseBodySavePlayer{pmap, "incorrect password"}
 					json.NewEncoder(w).Encode(rsb)
 				}
 			} else {
